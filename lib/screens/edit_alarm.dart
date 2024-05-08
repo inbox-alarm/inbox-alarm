@@ -19,8 +19,6 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
 
   late bool creating;
   late DateTime selectedDateTime;
-  late bool loopAudio;
-  late bool vibrate;
   late double? volume;
   late String assetAudio;
 
@@ -32,16 +30,8 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
     if (creating) {
       selectedDateTime = DateTime.now().add(const Duration(minutes: 1));
       selectedDateTime = selectedDateTime.copyWith(second: 0, millisecond: 0);
-      loopAudio = true;
-      vibrate = true;
-      volume = null;
-      assetAudio = 'assets/marimba.mp3';
     } else {
       selectedDateTime = widget.alarmSettings!.dateTime;
-      loopAudio = widget.alarmSettings!.loopAudio;
-      vibrate = widget.alarmSettings!.vibrate;
-      volume = widget.alarmSettings!.volume;
-      assetAudio = widget.alarmSettings!.assetAudioPath;
     }
   }
 
@@ -93,12 +83,12 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
     final alarmSettings = AlarmSettings(
       id: id,
       dateTime: selectedDateTime,
-      loopAudio: loopAudio,
-      vibrate: vibrate,
-      volume: volume,
-      assetAudioPath: assetAudio,
-      notificationTitle: 'Alarm example',
-      notificationBody: 'Your alarm ($id) is ringing',
+      loopAudio: true,
+      vibrate: true,
+      volume: 1.0,
+      assetAudioPath: 'assets/marimba.mp3',
+      notificationTitle: 'アラーム',
+      notificationBody: 'Alarm ($id) is ringing',
       enableNotificationOnKill: Platform.isIOS,
     );
     return alarmSettings;
@@ -156,12 +146,23 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
             ],
           ),
           Text(
-            getDay(),
+            '繰り返し',
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!
                 .copyWith(color: Colors.blueAccent.withOpacity(0.8)),
           ),
+          SizedBox(height: 32),
+          WeekdaySelector(
+            onChanged: (int day) {
+              setState(() {
+                final index = day % 7;
+                values[index] = !values[index];
+              });
+            },
+            values: values,
+          ),
+          SizedBox(height: 32),
           RawMaterialButton(
             onPressed: pickTime,
             fillColor: Colors.grey[200],
@@ -176,115 +177,6 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Loop alarm audio',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              Switch(
-                value: loopAudio,
-                onChanged: (value) => setState(() => loopAudio = value),
-              ),
-            ],
-          ),
-          WeekdaySelector(
-            onChanged: (int day) {
-              setState(() {
-                final index = day % 7;
-                values[index] = !values[index];
-              });
-            },
-            values: values,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Vibrate',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              Switch(
-                value: vibrate,
-                onChanged: (value) => setState(() => vibrate = value),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Sound',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              DropdownButton(
-                value: assetAudio,
-                items: const [
-                  DropdownMenuItem<String>(
-                    value: 'assets/marimba.mp3',
-                    child: Text('Marimba'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'assets/nokia.mp3',
-                    child: Text('Nokia'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'assets/mozart.mp3',
-                    child: Text('Mozart'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'assets/star_wars.mp3',
-                    child: Text('Star Wars'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'assets/one_piece.mp3',
-                    child: Text('One Piece'),
-                  ),
-                ],
-                onChanged: (value) => setState(() => assetAudio = value!),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Custom volume',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              Switch(
-                value: volume != null,
-                onChanged: (value) =>
-                    setState(() => volume = value ? 0.5 : null),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 30,
-            child: volume != null
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(
-                        volume! > 0.7
-                            ? Icons.volume_up_rounded
-                            : volume! > 0.1
-                                ? Icons.volume_down_rounded
-                                : Icons.volume_mute_rounded,
-                      ),
-                      Expanded(
-                        child: Slider(
-                          value: volume!,
-                          onChanged: (value) {
-                            setState(() => volume = value);
-                          },
-                        ),
-                      ),
-                    ],
-                  )
-                : const SizedBox(),
-          ),
           if (!creating)
             TextButton(
               onPressed: deleteAlarm,
@@ -296,7 +188,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
                     .copyWith(color: Colors.red),
               ),
             ),
-          const SizedBox(),
+          Spacer(),
         ],
       ),
     );
