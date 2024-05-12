@@ -35,10 +35,10 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
     }
   }
 
-  String getDay() {
+  String getDifferenceDay(dateTime: DateTime) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final difference = selectedDateTime.difference(today).inDays;
+    final difference = dateTime.difference(today).inDays;
 
     switch (difference) {
       case 0:
