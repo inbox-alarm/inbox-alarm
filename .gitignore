@@ -9,6 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
+.vscode/
 
 # IntelliJ related
 *.iml
@@ -42,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# google-services.json
+**/google-services.json
+**/GoogleService-Info.plist
+
+**/secrets.dart
+**/firebase_options.dart

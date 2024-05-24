@@ -1,4 +1,4 @@
-package com.gdelataillade.alarm.alarm_example
+package com.gdelataillade.inbox-alarm
 
 import io.flutter.embedding.android.FlutterActivity
 

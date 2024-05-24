@@ -5,22 +5,20 @@ import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 
-class ExampleAlarmEditScreen extends StatefulWidget {
-  const ExampleAlarmEditScreen({super.key, this.alarmSettings});
+class AlarmEditScreen extends StatefulWidget {
+  const AlarmEditScreen({super.key, this.alarmSettings});
 
   final AlarmSettings? alarmSettings;
 
   @override
-  State<ExampleAlarmEditScreen> createState() => _ExampleAlarmEditScreenState();
+  State<AlarmEditScreen> createState() => _AlarmEditScreenState();
 }
 
-class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
+class _AlarmEditScreenState extends State<AlarmEditScreen> {
   bool loading = false;
 
   late bool creating;
   late DateTime selectedDateTime;
-  late double? volume;
-  late String assetAudio;
 
   @override
   void initState() {
@@ -35,22 +33,22 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
     }
   }
 
-  String getDifferenceDay(dateTime: DateTime) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final difference = dateTime.difference(today).inDays;
+  // String getDifferenceDay(dateTime: DateTime) {
+  //   final now = DateTime.now();
+  //   final today = DateTime(now.year, now.month, now.day);
+  //   final difference = dateTime.difference(today).inDays;
 
-    switch (difference) {
-      case 0:
-        return 'Today';
-      case 1:
-        return 'Tomorrow';
-      case 2:
-        return 'After tomorrow';
-      default:
-        return 'In $difference days';
-    }
-  }
+  //   switch (difference) {
+  //     case 0:
+  //       return 'Today';
+  //     case 1:
+  //       return 'Tomorrow';
+  //     case 2:
+  //       return 'After tomorrow';
+  //     default:
+  //       return 'In $difference days';
+  //   }
+  // }
 
   Future<void> pickTime() async {
     final res = await showTimePicker(
@@ -83,9 +81,6 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
     final alarmSettings = AlarmSettings(
       id: id,
       dateTime: selectedDateTime,
-      loopAudio: true,
-      vibrate: true,
-      volume: 1.0,
       assetAudioPath: 'assets/marimba.mp3',
       notificationTitle: 'アラーム',
       notificationBody: 'Alarm ($id) is ringing',
@@ -152,7 +147,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
                 .titleMedium!
                 .copyWith(color: Colors.blueAccent.withOpacity(0.8)),
           ),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           WeekdaySelector(
             onChanged: (int day) {
               setState(() {
@@ -162,7 +157,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
             },
             values: values,
           ),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           RawMaterialButton(
             onPressed: pickTime,
             fillColor: Colors.grey[200],
@@ -188,7 +183,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
                     .copyWith(color: Colors.red),
               ),
             ),
-          Spacer(),
+          const Spacer(),
         ],
       ),
     );
